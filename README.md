@@ -1,6 +1,9 @@
 # aiogram-quiz-bot
 
 [Quiz bot](https://t.me/send_riko_msg_pls_bot) для Telegram. aiogram3, sqlite3.
+Для старта QUIZ'a необходимо ввести `/start`. 
+`Start Quiz` - получение нового вопроса, на который в чате нужно ввести ответ.
+`Statistics` - вывод статистики ответа на вопросы участником.
 
 ## Установка
 
@@ -30,3 +33,18 @@ python3 init_db.py
 python3 bot.py
 ```
 
+## Запуск через docker
+
+1) После сборки можно проверять бота. Запуск сборки:
+```bash
+docker-compose up --build
+```
+
+2) Удаление:
+```bash
+docker-compose down --rmi all --volumes
+```
+
+## Пример работы
+
+![alt text](image.png)
