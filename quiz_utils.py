@@ -1,4 +1,9 @@
 import sqlite3
+from aiogram.filters.state import State, StatesGroup
+
+
+class QuizStates(StatesGroup):
+    awaiting_answer = State()
 
 
 def get_question():
