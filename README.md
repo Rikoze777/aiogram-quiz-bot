@@ -47,4 +47,4 @@ docker-compose down --rmi all --volumes
 
 ## Пример работы
 
-![alt text](image.png)
+![alt text](image-1.png)

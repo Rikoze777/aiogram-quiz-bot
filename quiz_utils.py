@@ -3,21 +3,22 @@ from aiogram.filters.state import State, StatesGroup
 
 
 class QuizStates(StatesGroup):
-    awaiting_answer = State()
+    question = State()
+    finished = State()
 
 
-def get_question():
+def get_all_questions():
     conn = sqlite3.connect('quiz.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT id, question FROM questions ORDER BY RANDOM() LIMIT 1')
-    question = cursor.fetchone()
+    cursor.execute('SELECT * FROM questions')
+    questions = cursor.fetchall()
     conn.close()
-    return question
+    return questions
 
-def check_answer(question_id, answer):
+def check_answer(question_id, selected_option):
     conn = sqlite3.connect('quiz.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT answer FROM questions WHERE id = ?', (question_id,))
-    correct_answer = cursor.fetchone()[0]
+    cursor.execute('SELECT correct_option FROM questions WHERE id = ?', (question_id,))
+    correct_option = cursor.fetchone()[0]
     conn.close()
-    return correct_answer.lower() == answer.lower()
+    return int(selected_option.split('_')[1]) == correct_option
