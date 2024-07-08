@@ -1,7 +1,7 @@
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
-from habdlers import router
+from handlers import router
 
 import json
 

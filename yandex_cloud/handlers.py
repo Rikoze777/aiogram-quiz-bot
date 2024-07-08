@@ -26,11 +26,14 @@ async def start_quiz(callback_query: types.CallbackQuery, state: FSMContext):
     await state.update_data(questions=questions, current_question=0)
 
     question_data = questions[0]
-    question_id, question_text, options, _ = question_data
-    options_list = options.split('|')
+    question_id = question_data['id']
+    question_text = question_data['question']
+    options = question_data['options']
+    correct_option = question_data['correct_option']
+
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=option, callback_data=f"answer_{idx}") for idx, option in enumerate(options_list)]
+        [InlineKeyboardButton(text=option, callback_data=f"answer_{idx}") for idx, option in enumerate(options)]
     ])
     
     user_data[callback_query.from_user.id] = question_id
@@ -70,10 +73,9 @@ async def handle_answer(callback_query: types.CallbackQuery, state: FSMContext):
         if current_question < len(questions):
             question_data = questions[current_question]
             question_id, question_text, options, _ = question_data
-            options_list = options.split('|')
 
             keyboard = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text=option, callback_data=f"answer_{idx}") for idx, option in enumerate(options_list)]
+                [InlineKeyboardButton(text=option, callback_data=f"answer_{idx}") for idx, option in enumerate(options)]
             ])
 
             user_data[callback_query.from_user.id] = question_id
