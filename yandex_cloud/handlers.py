@@ -17,7 +17,7 @@ user_data = {}
 
 @router.message(Command('start'))
 async def send_welcome(message: types.Message):
-    await message.answer("Welcome to the quiz bot! Press 'Start Quiz' to begin.", reply_markup=markup)
+    await message.answer_photo(photo='https://d5d364hc7n7e820nqqbl.apigw.yandexcloud.net/quiz.jpeg', caption="Welcome to the quiz bot! Press 'Start Quiz' to begin.", reply_markup=markup)
 
 
 @router.callback_query(lambda c: c.data == 'start_quiz')
@@ -56,7 +56,9 @@ async def show_statistics(callback_query: types.CallbackQuery):
 @router.callback_query(lambda c: c.data.startswith('answer'))
 async def handle_answer(callback_query: types.CallbackQuery, state: FSMContext):
     user_id = callback_query.from_user.id
+    print('user_id', user_id)
     data = await state.get_data()
+    print('data', data)
     questions = data.get('questions')
     current_question = data.get('current_question')
 
@@ -64,7 +66,7 @@ async def handle_answer(callback_query: types.CallbackQuery, state: FSMContext):
         question_id = user_data[user_id]
         selected_option = callback_query.data
         correct = check_answer(question_id, selected_option)
-        update_user_stats(user_id, correct)
+        stats_query = update_user_stats(user_id, correct)
         if correct:
             await callback_query.message.answer('Correct! 🎉')
         else:
@@ -72,8 +74,13 @@ async def handle_answer(callback_query: types.CallbackQuery, state: FSMContext):
         current_question += 1
         if current_question < len(questions):
             question_data = questions[current_question]
-            question_id, question_text, options, _ = question_data
+            print('quest_data', question_data)
 
+            question_id = question_data['id']
+            question_text = question_data['question']
+            options = question_data['options']
+            correct_option = question_data['correct_option']
+            
             keyboard = InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text=option, callback_data=f"answer_{idx}") for idx, option in enumerate(options)]
             ])

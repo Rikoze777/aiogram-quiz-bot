@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS questions (
     id Uint64,
-    question String,
+    question Utf8,
     options Utf8,
     correct_option Uint64,
     PRIMARY KEY (id)

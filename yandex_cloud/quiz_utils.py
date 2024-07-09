@@ -30,20 +30,15 @@ def get_all_questions():
 
 
 def check_answer(question_id, selected_option):
-    params = {
-            '$id': question_id,
-        }
     def select_correct_option(session):
         result_set = session.transaction(ydb.SerializableReadWrite()).execute(
-            'DECLARE $id AS Uint64; SELECT correct_option FROM questions WHERE id = $id;',
-            params,
+            f"SELECT correct_option FROM questions WHERE id = {question_id};",
             commit_tx=True
         )
         return result_set
 
     result = pool.retry_operation_sync(select_correct_option)
     correct_option = result[0].rows[0].correct_option
-    print('corr_opt', int(correct_option))
-    print('check', int(selected_option.split('_')[1]))
-    return int(selected_option.split('_')[1]) == int(correct_option)
+    print('check', selected_option.split('_')[1])
+    return int(selected_option.split('_')[1]) == correct_option
 

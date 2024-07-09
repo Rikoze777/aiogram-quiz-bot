@@ -8,7 +8,7 @@ from keyboard import markup
 from aiogram.fsm.context import FSMContext
 from quiz_utils import QuizStates
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
+from aiogram.methods import SendPhoto
 
 router = Router()
 
@@ -17,7 +17,9 @@ user_data = {}
 
 @router.message(Command('start'))
 async def send_welcome(message: types.Message):
-    await message.answer("Welcome to the quiz bot! Press 'Start Quiz' to begin.", reply_markup=markup)
+    await message.answer_photo(photo='https://d5d364hc7n7e820nqqbl.apigw.yandexcloud.net/quiz.jpeg', caption="Welcome to the quiz bot! Press 'Start Quiz' to begin.", reply_markup=markup)
+    # await message.answer("Welcome to the quiz bot! Press 'Start Quiz' to begin.", reply_markup=markup)_photo(photo=types.FSInputFile('https://d5d364hc7n7e820nqqbl.apigw.yandexcloud.net'))
+    # await message.send(user_id, photo='https://d5d364hc7n7e820nqqbl.apigw.yandexcloud.net')
 
 
 @router.callback_query(lambda c: c.data == 'start_quiz')
